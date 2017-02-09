@@ -1,0 +1,9 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+	name = Cat Stevens
+	email = catb0t@protonmail.ch
+[push]
+	default = simple
+[credential]
+	helper = store
