@@ -63,6 +63,8 @@ up () {
 	sudo updatedb
 }
 
+alias memcheck='vl --leak-check=full --track-origins=yes --show-leak-kinds=all'
+
 
 #greeter () {
 #
@@ -92,7 +94,7 @@ export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT='%d-%m-%y %H:%M '
 export PAGER='less -X'
-export PATH=/home/cat/projects/factor/factor:/home/cat/bin:/home/cat/.rakudobrew/bin:/home/cat/.rakudobrew/moar-nom/install/share/perl6/site/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+export PATH=/home/cat/projects/factor/factor:/home/cat/bin:/home/cat/.rakudobrew/bin:/home/cat/.rakudobrew/moar-nom/install/share/perl6/site/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/cat/bin/tecgraf/tecmake
 
 export PS1='\n\[\e[1;35m\]`nonzero_return`\[\e[1;34m\]\u @ \[\e[1;32m\]\h : \[\e[1;31m\]\w\[\e[1;32m\]`git_prompt` \[\e[1;35m\]$ \[\e[m\]'
 export PS2='> '
