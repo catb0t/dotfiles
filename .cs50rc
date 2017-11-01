@@ -1,0 +1,201 @@
+#!/bin/bash
+
+shopt -s nullglob
+
+CS50_OPT_LIBS="-lm -lcs50"
+export CS50_OPT_LIBS
+CS50_OPT_TESTLIB="-lcriterion"
+export CS50_OPT_TESTLIB
+CS50_OPT_COMMON="-std=c11 -Wall -Wextra -Wfloat-equal -Winline -Wundef -Werror -fverbose-asm -Wint-to-pointer-cast -Wshadow -Wpointer-arith -Wcast-align  -Wcast-qual -Wunreachable-code -Wstrict-overflow=5 -Wwrite-strings -Wconversion --pedantic-errors -ggdb -Wredundant-decls"
+export CS50_OPT_COMMON
+CS50_OPT_GCC="-Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn"
+export CS50_OPT_GCC
+CS50_OPT_GCCMEM="-fstack-protector -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -static-libasan -static-libtsan -static-liblsan -static-libubsan -lasan -lubsan"
+export CS50_OPT_GCCMEM
+
+
+chk () (
+  set -e
+  fmt
+  gc
+  llv
+  set -x
+	check50 "$SLUG$(basename $PWD)"
+  set +ex
+)
+
+sub () (
+  set -e
+  chk
+  set -x
+  yes | submit50 "$SLUG$(basename $PWD)"
+  set +ex
+)
+
+fmt () (
+  set -ex
+  local arg bn tmp_common tmp_c tmp_h
+  arg="$1"
+  bn="$(basename $PWD)"
+  tmp_common="$(sed -r 's/^#pragma once$|(.+)\(typeof\([a-z_A-Z0-9*]+\)\)(.+)/\1\2/gm' ../common.h)"
+  tmp_c="$( ([[ -z $arg ]] && tail +2 "my_$bn.c") || echo )"
+  tmp_h="$(awk '/^#include *<cs50.+$/ { print; } /^[^#]*$/ { print; }' "my_$bn.h")"
+  echo "$tmp_common
+$tmp_h
+$tmp_c" | \
+    astyle --ascii --add-braces --break-one-line-headers \
+    --align-pointer=name --pad-comma --pad-header --pad-oper \
+    --max-code-length=100 --convert-tabs --indent=spaces=4 \
+    --indent-continuation=1 --indent-switches --lineend=linux \
+    --min-conditional-indent=1 --style=allman > "$bn.c"
+  set +ex
+)
+
+gcd () (
+  set -e
+  fmt
+  set -x
+  local bn
+  bn="$(basename $PWD)"
+  gcc $CS50_OPT_LIBS "$bn.c" -o "bin/debug_$bn" $CS50_OPT_COMMON $CS50_OPT_GCC $CS50_OPT_GCCMEM
+  set +ex
+)
+
+gc () (
+  set -e
+  fmt
+  set -x
+  local bn
+  bn="$(basename $PWD)"
+  gcc $CS50_OPT_LIBS "$bn.c" -o "bin/$bn" $CS50_OPT_COMMON $CS50_OPT_GCC
+  set +ex
+)
+
+llv () (
+  set -e
+  fmt
+  set -x
+  local bn
+  bn="$(basename $PWD)"
+  clang $CS50_OPT_LIBS "$bn.c" -o "bin/$bn" $CS50_OPT_COMMON
+  set +ex
+)
+
+clw () (
+  set -ex
+  command rm */*.o *.o bin/* "$(basename $PWD).c"
+  set +ex
+)
+
+
+ini () (
+  set -ex
+  (
+    mkdir /home/cat/projects/cs50/2017/ap/"$1"/bin -p
+    echo "#include <cs50.h>
+#include \"my_$1.h\"
+
+int main (void) {
+
+  return EXIT_SUCCESS;
+}
+" > /home/cat/projects/cs50/2017/ap/"$1/my_$1.c"
+
+    echo "#include <cs50.h>
+#include \"/home/cat/projects/cs50/2017/ap/common.h\"
+
+void $1 (void);
+" > /home/cat/projects/cs50/2017/ap/"$1/my_$1.h"
+
+    echo "#include <criterion/criterion.h>
+#include \"my_$1.h\"
+
+Test(something, main) {
+  cr_assert( true );
+}
+" > /home/cat/projects/cs50/2017/ap/"$1/my_test_$1.c"
+  )
+  set +ex
+)
+
+tst-get () {
+  set -ex
+  echo "test gatherer coming"
+  set +ex
+}
+
+tst () (
+  set -e
+  gc
+  llv
+  fmt test
+  set -x
+  local bn
+  bn="$(basename $PWD)"
+  gcc $CS50_OPT_LIBS $CS50_OPT_TESTLIB "my_test_$bn.c" -o "bin/test_$bn" $CS50_OPT_COMMON -std=gnu11 $CS50_OPT_GCC
+  "bin/test_$bn"
+  set +ex
+)
+
+run-gc () (
+  echo -e "\ndoing gcc"
+  set -e
+  gc
+  set -x
+  "bin/$(basename $PWD)"
+  set +ex
+)
+
+run-llv () (
+  echo -e "\ndoing clang"
+  set -e
+  llv
+  set -x
+  "bin/$(basename $PWD)"
+  set +ex
+)
+
+run-gcd () (
+  echo -e "\ndoing asan"
+  set -e
+  gcd
+  set -x
+  "bin/debug_$(basename $PWD)"
+  set +ex
+)
+
+run-gcvl () (
+  echo -e "\ndoing gcc+vl"
+  set -e
+  gc
+  set -x
+  vl --leak-check=full "bin/$(basename $PWD)"
+  set +ex
+)
+
+run-llvl () (
+  echo -e "\ndoing gcc+vl"
+  set -e
+  llv
+  set -x
+  vl --leak-check=full "bin/$(basename $PWD)"
+  set +ex
+)
+
+run-all () (
+  echo -e "\ndoing all"
+  set -e
+  fmt
+  gc
+  gcd
+  llv
+  fmt test
+  tst
+  set -x
+  local bn
+  bn=$(basename $PWD)
+  # "bin/$bn"
+  # "bin/debug_$bn"
+  set +ex
+  clw
+)
