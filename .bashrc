@@ -88,24 +88,29 @@ _init () {
 	greeter
 }
 
+source ~/.cs50rc
+
 export FACTOR_ROOTS=/home/cat/projects/git/exercism.factor
 export HISTFILE=/home/cat/.bash_history
 export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT='%d-%m-%y %H:%M '
 export PAGER='less -X'
-export PATH=/home/cat/projects/factor/factor:/home/cat/bin:/home/cat/.rakudobrew/bin:/home/cat/.rakudobrew/moar-nom/install/share/perl6/site/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/cat/bin/tecgraf/tecmake
+export PATH=/home/cat/projects/factor/factor:/home/cat/bin:/home/cat/.rakudobrew/bin:/home/cat/.rakudobrew/moar-nom/install/share/perl6/site/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
 
 export PS1='\n\[\e[1;35m\]`nonzero_return`\[\e[1;34m\]\u @ \[\e[1;32m\]\h : \[\e[1;31m\]\w\[\e[1;32m\]`git_prompt` \[\e[1;35m\]$ \[\e[m\]'
 export PS2='> '
 export PS4='+ '
 alias make='make -j'
-
 _init
 
 PATH="/home/cat/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/home/cat/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/cat/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/cat/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/cat/perl5"; export PERL_MM_OPT;
+#PERL5LIB="/home/cat/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+#PERL_LOCAL_LIB_ROOT="/home/cat/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+#PERL_MB_OPT="--install_base \"/home/cat/perl5\""; export PERL_MB_OPT;
+#PERL_MM_OPT="INSTALL_BASE=/home/cat/perl5"; export PERL_MM_OPT;
 export PATH=$HOME/bin:$PATH
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/cat/.sdkman"
+[[ -s "/home/cat/.sdkman/bin/sdkman-init.sh" ]] && source "/home/cat/.sdkman/bin/sdkman-init.sh"

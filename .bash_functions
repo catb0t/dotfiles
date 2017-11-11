@@ -81,7 +81,7 @@ greeter ()
     fortune;
     echo;
     echo $TOD, Cat.;
-    /usr/bin/mouse ~/projects/mouse/code/time-chap/time-chap-once.m02
+    #/usr/bin/mouse ~/projects/mouse/code/time-chap/time-chap-once.m02
 }
 import ()
 {
