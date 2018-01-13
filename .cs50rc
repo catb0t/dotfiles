@@ -18,7 +18,7 @@ export CS50_OPT_GCCMEM
 
 mkdir -p "/home/$USER/projects/$CS50_SLUG"
 
-chk () (
+cs50-check () (
   set -e
   fmt
   gc
@@ -30,7 +30,7 @@ chk () (
   set +ex
 )
 
-sub () (
+cs50-submit () (
   set -e
   chk
   set -x
@@ -39,7 +39,7 @@ sub () (
   set +ex
 )
 
-fmt () (
+cs50-format () (
   set -ex
   local arg bn tmp_common tmp_c tmp_h
   arg="$1"
@@ -58,7 +58,7 @@ $tmp_c" | \
   set +ex
 )
 
-gcd () (
+cs50-compile-gcc_debug () (
   set -e
   fmt
   set -x
@@ -68,7 +68,7 @@ gcd () (
   set +ex
 )
 
-gc () (
+cs50-compile-gcc () (
   set -e
   fmt
   set -x
@@ -78,7 +78,7 @@ gc () (
   set +ex
 )
 
-llv () (
+cs50-compile-llvm () (
   set -e
   fmt
   set -x
@@ -88,14 +88,14 @@ llv () (
   set +ex
 )
 
-clw () (
+cs50-clean () (
   set -ex
   command rm */*.o *.o bin/* "$(basename $PWD).c"
   set +ex
 )
 
 
-ini () (
+cs50-init () (
   set -ex
   (
     mkdir "/home/$USER/projects/$CS50_SLUG/$1/bin" -p
@@ -124,13 +124,8 @@ Test(something, main) {
   set +ex
 )
 
-tst-get () {
-  set -ex
-  echo "test gatherer coming"
-  set +ex
-}
 
-tst () (
+cs50-test () (
   set -e
   gc
   llv
@@ -143,7 +138,7 @@ tst () (
   set +ex
 )
 
-run-gc () (
+cs50-run-gcc () (
   echo -e "\ndoing gcc"
   set -e
   gc
@@ -152,7 +147,7 @@ run-gc () (
   set +ex
 )
 
-run-llv () (
+cs50-run-llvm () (
   echo -e "\ndoing clang"
   set -e
   llv
@@ -161,7 +156,7 @@ run-llv () (
   set +ex
 )
 
-run-gcd () (
+cs50-run-gcc_debug () (
   echo -e "\ndoing asan"
   set -e
   gcd
@@ -170,7 +165,7 @@ run-gcd () (
   set +ex
 )
 
-run-gcvl () (
+cs50-run-gcc_mc () (
   echo -e "\ndoing gcc+vl"
   set -e
   gc
@@ -179,7 +174,7 @@ run-gcvl () (
   set +ex
 )
 
-run-llvl () (
+cs50-run-llvm_mc () (
   echo -e "\ndoing gcc+vl"
   set -e
   llv
@@ -188,7 +183,7 @@ run-llvl () (
   set +ex
 )
 
-run-all () (
+cs50-runall () (
   echo -e "\ndoing all"
   set -e
   fmt
@@ -205,3 +200,8 @@ run-all () (
   set +ex
   clw
 )
+
+cs50 () {
+  echo -e "$@"
+  cs50-$1${2:-}
+}

@@ -63,7 +63,7 @@ up () {
 	sudo updatedb
 }
 
-alias memcheck='vl --leak-check=full --track-origins=yes --show-leak-kinds=all'
+alias mc='vl --leak-check=full --track-origins=yes --show-leak-kinds=all'
 
 
 #greeter () {
@@ -102,6 +102,8 @@ export PS1='\n\[\e[1;35m\]`nonzero_return`\[\e[1;34m\]\u @ \[\e[1;32m\]\h : \[\e
 export PS2='> '
 export PS4='+ '
 alias make='make -j'
+alias wipe='make project=clobber clean'
+alias pmake='premake gmake'
 _init
 
 PATH="/home/cat/perl5/bin${PATH:+:${PATH}}"; export PATH;
@@ -111,6 +113,8 @@ PATH="/home/cat/perl5/bin${PATH:+:${PATH}}"; export PATH;
 #PERL_MM_OPT="INSTALL_BASE=/home/cat/perl5"; export PERL_MM_OPT;
 export PATH=$HOME/bin:$PATH
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/cat/.sdkman"
-[[ -s "/home/cat/.sdkman/bin/sdkman-init.sh" ]] && source "/home/cat/.sdkman/bin/sdkman-init.sh"
+PATH="/home/cat/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/home/cat/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/cat/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/cat/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/cat/perl5"; export PERL_MM_OPT;
