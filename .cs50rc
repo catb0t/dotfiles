@@ -20,9 +20,9 @@ mkdir -p "/home/$USER/projects/$CS50_SLUG"
 
 cs50-check () (
   set -e
-  fmt
-  gc
-  llv
+  cs50-format
+  cs50-compile-gcc
+  cs50-compile-llvm
   set -x
   local bn
   bn=$(basename $PWD)
@@ -32,7 +32,7 @@ cs50-check () (
 
 cs50-submit () (
   set -e
-  chk
+  cs50-check
   set -x
   bn=$(basename $PWD)
   yes | submit50 "$CS50_SLUG/$bn$([[ $bn = "mario" ]] && echo "/more")"
@@ -60,7 +60,7 @@ $tmp_c" | \
 
 cs50-compile-gcc_debug () (
   set -e
-  fmt
+  cs50-format
   set -x
   local bn
   bn="$(basename $PWD)"
@@ -70,7 +70,7 @@ cs50-compile-gcc_debug () (
 
 cs50-compile-gcc () (
   set -e
-  fmt
+  cs50-format
   set -x
   local bn
   bn="$(basename $PWD)"
@@ -80,7 +80,7 @@ cs50-compile-gcc () (
 
 cs50-compile-llvm () (
   set -e
-  fmt
+  cs50-format
   set -x
   local bn
   bn="$(basename $PWD)"
@@ -127,9 +127,9 @@ Test(something, main) {
 
 cs50-test () (
   set -e
-  gc
-  llv
-  fmt test
+  cs50-compile-gcc
+  cs50-compile-llvm
+  cs50-format test
   set -x
   local bn
   bn="$(basename $PWD)"
@@ -141,7 +141,7 @@ cs50-test () (
 cs50-run-gcc () (
   echo -e "\ndoing gcc"
   set -e
-  gc
+  cs50-compile-gcc
   set -x
   "bin/$(basename $PWD)"
   set +ex
@@ -150,7 +150,7 @@ cs50-run-gcc () (
 cs50-run-llvm () (
   echo -e "\ndoing clang"
   set -e
-  llv
+  cs50-compile-llvm
   set -x
   "bin/clang_$(basename $PWD)"
   set +ex
@@ -159,7 +159,7 @@ cs50-run-llvm () (
 cs50-run-gcc_debug () (
   echo -e "\ndoing asan"
   set -e
-  gcd
+  cs50-compile-gcc_debug
   set -x
   "bin/debug_$(basename $PWD)"
   set +ex
@@ -168,7 +168,7 @@ cs50-run-gcc_debug () (
 cs50-run-gcc_mc () (
   echo -e "\ndoing gcc+vl"
   set -e
-  gc
+  cs50-compile-gcc
   set -x
   vl --leak-check=full "bin/$(basename $PWD)"
   set +ex
@@ -177,7 +177,7 @@ cs50-run-gcc_mc () (
 cs50-run-llvm_mc () (
   echo -e "\ndoing gcc+vl"
   set -e
-  llv
+  cs50-compile-llvm
   set -x
   vl --leak-check=full "bin/clang_$(basename $PWD)"
   set +ex
@@ -186,12 +186,12 @@ cs50-run-llvm_mc () (
 cs50-runall () (
   echo -e "\ndoing all"
   set -e
-  fmt
-  gc
-  gcd
-  llv
-  fmt test
-  tst
+  cs50-format
+  cs50-compile-gcc
+  cs50-compile-gcc_debug
+  cs50-compile-llvm
+  cs50-format test
+  cs50-test
   set -x
   local bn
   bn=$(basename $PWD)
@@ -202,6 +202,11 @@ cs50-runall () (
 )
 
 cs50 () {
-  echo -e "$@"
-  cs50-$1${2:-}
+  echo -e "$@" "$#"
+  local arg1 arg2
+  arg1=$1
+  arg2=$2
+  shift
+  shift
+  cs50-$arg1${arg2:-} "$@"
 }
