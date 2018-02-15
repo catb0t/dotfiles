@@ -1,6 +1,4 @@
 USE: ui.theme.switching dark-mode
-USE: math.matrices 
-USE: english
 USING: combinators eval kernel literals help.lint.coverage vocabs vocabs.parser vocabs.loader tools.test help.lint sequences system namespaces prettyprint.config ; 
 IN: scratchpad 
 
@@ -10,7 +8,7 @@ IN: scratchpad
     [ test ]
     [ help-lint ]
     $[ "matrices" vm-git-ref subseq? 
-      [ "USE: help.lint.coverage \\ vocab-help-coverage." eval( -- x ) execute( x -- ) ]
+      [ <vocab-help-coverage> "USE: help.lint.coverage \\ print-coverage" eval( -- x ) execute( x -- ) ]
       [ \ <vocab-help-coverage> "USE: help.lint.coverage \\ print-coverage" eval( x -- ) execute( x -- ) ]
       ?
     ]
