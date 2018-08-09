@@ -7,3 +7,5 @@
 	default = simple
 [credential]
 	helper = store
+[core]
+	editor = vim
