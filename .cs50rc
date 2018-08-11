@@ -124,7 +124,6 @@ Test(something, main) {
   set +ex
 )
 
-
 cs50-test () (
   set -e
   cs50-compile-gcc
