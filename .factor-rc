@@ -1,5 +1,5 @@
 USE: ui.theme.switching dark-mode
-USING: ui.tools.listener system io.encodings.utf8 io.pathnames io io.launcher io.directories combinators threads eval kernel literals help.lint.coverage vocabs vocabs.parser vocabs.loader tools.test help.lint sequences system namespaces prettyprint.config ;
+USING: ui.tools.listener system io.encodings.utf8 io.pathnames io io.launcher io.directories combinators threads eval kernel literals help.lint.coverage vocabs vocabs.parser vocabs.loader tools.test help.lint sequences system namespaces prettyprint.config ui ;
 IN: scratchpad
 
 : wf ( name -- )
@@ -20,4 +20,4 @@ IN: scratchpad
 f string-limit? set-global
 t boa-tuples? set-global
 t c-object-pointers? set-global
-[ .3 sleep "monospace" 10 set-listener-font ] in-thread
+ui-running? [ [ .3 sleep "monospace" 10 set-listener-font ] in-thread ] when

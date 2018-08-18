@@ -11,5 +11,6 @@
 	helper = store
 [core]
   editor = xo
-
+  autocrlf = false
+  excludesfile = /home/cat/.config/git/ignore
 

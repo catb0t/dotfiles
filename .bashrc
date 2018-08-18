@@ -24,7 +24,7 @@ export HISTSIZE=
 export HISTFILESIZE=
 export HISTTIMEFORMAT="%d-%m-%y %H:%M "
 #export HISTCONTROL=ignoredups
-export ED=vim
+export ED=xo
 
 
 function nonzero_return() {
@@ -91,6 +91,7 @@ _init () {
 source ~/.cs50rc
 
 export FACTOR_ROOTS=/home/cat/projects/git/exercism.factor
+export FACTOR_FOLDER=/home/cat/projects/git/factor-devel
 export HISTFILE=/home/cat/.bash_history
 export HISTFILESIZE=
 export HISTSIZE=
